@@ -7,7 +7,7 @@
 	<a href="/" class="text-muted-foreground transition-colors hover:text-foreground"> Homepage </a>
 	<a href="/" class="text-muted-foreground transition-colors hover:text-foreground"> Game list </a>
 	<a href="/" class="text-muted-foreground transition-colors hover:text-foreground"> Settings </a>
-	<div class="ml-auto">
+	<div class="ml-auto space-x-5">
 		<SignInUp />
 		<LightSwitch />
 	</div>
