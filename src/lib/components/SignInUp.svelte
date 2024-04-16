@@ -1,10 +1,12 @@
 <script>
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import { Input } from '$lib/components/ui/input';
+	import { Button } from '$lib/components/ui/button';
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger>SignIn / SignUp</Dialog.Trigger>
+	<Dialog.Trigger>Sign In / Sign Up</Dialog.Trigger>
 	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
@@ -15,8 +17,16 @@
 				<Tabs.Trigger value="signin">Sign In</Tabs.Trigger>
 				<Tabs.Trigger value="signup">Sign Up</Tabs.Trigger>
 			</Tabs.List>
-			<Tabs.Content value="signin">Sign in form here</Tabs.Content>
-			<Tabs.Content value="signup">Sign up form here</Tabs.Content>
+			<Tabs.Content value="signin">
+				<Input type="email" placeholder="Email" />
+				<Input type="password" placeholder="Password" />
+				<Button>Sign in</Button>
+			</Tabs.Content>
+			<Tabs.Content value="signup">
+				<Input type="email" placeholder="Email" />
+				<Input type="password" placeholder="Password" />
+				<Button>Sign up</Button>
+			</Tabs.Content>
 		</Tabs.Root>
 	</Dialog.Content>
 </Dialog.Root>
