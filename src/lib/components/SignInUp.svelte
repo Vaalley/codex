@@ -3,6 +3,27 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
+	import { signup, signin } from '$lib/databaseOperations';
+
+	let username = $state('');
+	let email = $state('');
+	let password = $state('');
+
+	const resetForm = () => {
+		username = '';
+		email = '';
+		password = '';
+	};
+
+	const handleSignup = async () => {
+		await signup(username, email, password);
+		resetForm();
+	};
+
+	const handleSignin = async () => {
+		await signin(email, password);
+		resetForm();
+	};
 </script>
 
 <Dialog.Root>
@@ -17,15 +38,16 @@
 				<Tabs.Trigger value="signin">Sign In</Tabs.Trigger>
 				<Tabs.Trigger value="signup">Sign Up</Tabs.Trigger>
 			</Tabs.List>
-			<Tabs.Content value="signin">
-				<Input type="email" placeholder="Email" />
-				<Input type="password" placeholder="Password" />
-				<Button>Sign in</Button>
+			<Tabs.Content value="signin" class="mt-5 space-y-5">
+				<Input bind:value={email} type="email" placeholder="Email" />
+				<Input bind:value={password} type="password" placeholder="Password" />
+				<Button on:click={handleSignin}>Sign in</Button>
 			</Tabs.Content>
-			<Tabs.Content value="signup">
-				<Input type="email" placeholder="Email" />
-				<Input type="password" placeholder="Password" />
-				<Button>Sign up</Button>
+			<Tabs.Content value="signup" class="mt-5 space-y-5">
+				<Input bind:value={username} type="text" placeholder="Username" />
+				<Input bind:value={email} type="email" placeholder="Email" />
+				<Input bind:value={password} type="password" placeholder="Password" />
+				<Button on:click={handleSignup}>Sign up</Button>
 			</Tabs.Content>
 		</Tabs.Root>
 	</Dialog.Content>
