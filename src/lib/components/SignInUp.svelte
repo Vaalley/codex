@@ -1,4 +1,5 @@
 <script>
+	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { Input } from '$lib/components/ui/input';
@@ -8,6 +9,7 @@
 	let username = $state('');
 	let email = $state('');
 	let password = $state('');
+	let isLoading = $state(false);
 
 	const resetForm = () => {
 		username = '';
@@ -16,13 +18,27 @@
 	};
 
 	const handleSignup = async () => {
-		await signup(username, email, password);
-		resetForm();
+		isLoading = true;
+		try {
+			await signup(username, email, password);
+		} catch (error) {
+			console.error('Signup failed:', error);
+		} finally {
+			isLoading = false;
+			resetForm();
+		}
 	};
 
 	const handleSignin = async () => {
-		await signin(email, password);
-		resetForm();
+		isLoading = true;
+		try {
+			await signin(email, password);
+		} catch (error) {
+			console.error('Signin failed:', error);
+		} finally {
+			isLoading = false;
+			resetForm();
+		}
 	};
 </script>
 
@@ -41,13 +57,23 @@
 			<Tabs.Content value="signin" class="mt-5 space-y-5">
 				<Input bind:value={email} type="email" placeholder="Email" />
 				<Input bind:value={password} type="password" placeholder="Password" />
-				<Button on:click={handleSignin}>Sign in</Button>
+				<Button on:click={handleSignin} disabled={isLoading}>
+					{#if isLoading}
+						<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+					{/if}
+					Sign in
+				</Button>
 			</Tabs.Content>
 			<Tabs.Content value="signup" class="mt-5 space-y-5">
 				<Input bind:value={username} type="text" placeholder="Username" />
 				<Input bind:value={email} type="email" placeholder="Email" />
 				<Input bind:value={password} type="password" placeholder="Password" />
-				<Button on:click={handleSignup}>Sign up</Button>
+				<Button on:click={handleSignup} disabled={isLoading}>
+					{#if isLoading}
+						<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+					{/if}
+					Sign up
+				</Button>
 			</Tabs.Content>
 		</Tabs.Root>
 	</Dialog.Content>
