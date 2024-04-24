@@ -2,7 +2,7 @@ import { client } from './databaseClient';
 import * as bcrypt from 'bcryptjs';
 
 async function hashPassword(password: string): Promise<string> {
-	const saltRounds = 10; // You can adjust the number of rounds as necessary
+	const saltRounds = 10; // Adjust the number of rounds as necessary
 	const hashedPassword = await bcrypt.hash(password, saltRounds);
 	return hashedPassword;
 }
@@ -18,7 +18,6 @@ export async function signup(username: string, email: string, password: string) 
 
 export async function signin(email: string, password: string) {
 	// Fetch the user from the database by email
-	// You should select the password_hash instead of the password since you store hashed passwords
 	const userResult = await client.execute({
 		sql: 'SELECT * FROM users WHERE email = :email',
 		args: { email }
@@ -34,8 +33,13 @@ export async function signin(email: string, password: string) {
 	// Use bcrypt.compare to check if the provided password matches the stored hashed password
 	const isMatch = await bcrypt.compare(password, user.password_hash);
 	if (isMatch) {
-		// The passwords match, return the user data
+		// The passwords match, update the user's last-login and return the user data
 		// console.log(user);
+		await client.execute({
+			sql: 'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE ID = :id',
+			args: { id: user.ID } // Make sure to use the correct case for the ID field, it should match your database schema.
+		});
+
 		return user;
 	} else {
 		throw new Error('Invalid email or password');

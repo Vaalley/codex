@@ -10,6 +10,9 @@
 	let email = $state('');
 	let password = $state('');
 	let isLoading = $state(false);
+	let user = $state(null);
+
+	// $inspect(user);
 
 	const resetForm = () => {
 		username = '';
@@ -32,7 +35,8 @@
 	const handleSignin = async () => {
 		isLoading = true;
 		try {
-			await signin(email, password);
+			const signedInUser = await signin(email, password);
+			user = signedInUser; // Set the user object upon successful sign-in
 		} catch (error) {
 			console.error('Signin failed:', error);
 		} finally {
@@ -55,6 +59,9 @@
 				<Tabs.Trigger value="signup">Sign Up</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="signin" class="mt-5 space-y-5">
+				{#if user}
+					<p>You are signed in!</p>
+				{/if}
 				<Input bind:value={email} type="email" placeholder="Email" />
 				<Input bind:value={password} type="password" placeholder="Password" />
 				<Button on:click={handleSignin} disabled={isLoading}>
