@@ -1,9 +1,10 @@
 <script>
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+	import LogIn from 'lucide-svelte/icons/log-in';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { Input } from '$lib/components/ui/input';
-	import { Button } from '$lib/components/ui/button';
+	import { buttonVariants, Button } from '$lib/components/ui/button/index';
 	import { signup, signin } from '$lib/databaseOperations';
 
 	let username = $state('');
@@ -35,8 +36,7 @@
 	const handleSignin = async () => {
 		isLoading = true;
 		try {
-			const signedInUser = await signin(email, password);
-			user = signedInUser; // Set the user object upon successful sign-in
+			user = await signin(email, password);
 		} catch (error) {
 			console.error('Signin failed:', error);
 		} finally {
@@ -47,7 +47,9 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger>Sign In / Sign Up</Dialog.Trigger>
+	<Dialog.Trigger class={[buttonVariants({ variant: 'secondary' }), 'flex items-center gap-2']}
+		><LogIn class="h-4 w-4" /> Sign In / Sign Up</Dialog.Trigger
+	>
 	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
