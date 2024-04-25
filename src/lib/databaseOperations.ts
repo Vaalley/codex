@@ -8,6 +8,18 @@ async function hashPassword(password: string): Promise<string> {
 }
 
 export async function signup(username: string, email: string, password: string) {
+	if (typeof username !== 'string' || username.length < 3) {
+		throw new Error('Username must be at least 3 characters long');
+	}
+
+	if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+		throw new Error('Email is not in a valid format');
+	}
+
+	if (typeof password !== 'string' || password.length < 8) {
+		throw new Error('Password must be at least 8 characters');
+	}
+
 	const hashedPassword = await hashPassword(password);
 	const user = await client.execute({
 		sql: 'INSERT INTO users (email, password_hash, username) VALUES (:email, :hashedPassword, :username) RETURNING *',

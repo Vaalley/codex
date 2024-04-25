@@ -1,4 +1,5 @@
 <script>
+	import { toast } from 'svelte-sonner';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import LogIn from 'lucide-svelte/icons/log-in';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -25,8 +26,10 @@
 		isLoading = true;
 		try {
 			await signup(username, email, password);
+			toast.success('Signup successful!');
 		} catch (error) {
 			console.error('Signup failed:', error);
+			toast.error('Signup failed!');
 		} finally {
 			isLoading = false;
 			resetForm();
@@ -37,8 +40,10 @@
 		isLoading = true;
 		try {
 			user = await signin(email, password);
+			toast.success('Sign in successful!');
 		} catch (error) {
 			console.error('Signin failed:', error);
+			toast.error('Sign in failed!');
 		} finally {
 			isLoading = false;
 			resetForm();
@@ -47,9 +52,11 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger class={[buttonVariants({ variant: 'secondary' }), 'flex items-center gap-2']}
-		><LogIn class="h-4 w-4" /> Sign In / Sign Up</Dialog.Trigger
-	>
+	{#if !user}
+		<Dialog.Trigger class={[buttonVariants({ variant: 'secondary' }), 'flex items-center gap-2']}
+			><LogIn class="h-4 w-4" /> Sign In / Sign Up</Dialog.Trigger
+		>
+	{/if}
 	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
@@ -61,9 +68,6 @@
 				<Tabs.Trigger value="signup">Sign Up</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="signin" class="mt-5 space-y-5">
-				{#if user}
-					<p>You are signed in!</p>
-				{/if}
 				<Input bind:value={email} type="email" placeholder="Email" />
 				<Input bind:value={password} type="password" placeholder="Password" />
 				<Button on:click={handleSignin} disabled={isLoading}>
