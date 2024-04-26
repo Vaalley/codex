@@ -29,7 +29,7 @@
 			toast.success('Signup successful!');
 		} catch (error) {
 			console.error('Signup failed:', error);
-			toast.error('Signup failed!');
+			toast.error(`Signup failed: ${error.message}`);
 		} finally {
 			isLoading = false;
 			resetForm();
@@ -40,10 +40,11 @@
 		isLoading = true;
 		try {
 			user = await signin(email, password);
+			console.log(user);
 			toast.success('Sign in successful!');
 		} catch (error) {
 			console.error('Signin failed:', error);
-			toast.error('Sign in failed!');
+			toast.error(`Sign in failed: ${error.message}`);
 		} finally {
 			isLoading = false;
 			resetForm();
@@ -59,8 +60,8 @@
 	{/if}
 	<Dialog.Content>
 		<Dialog.Header>
-			<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
-			<Dialog.Description></Dialog.Description>
+			<Dialog.Title>Welcome {Tabs.Root.value === 'signin' ? 'back' : ''} to Codex!</Dialog.Title>
+			<Dialog.Description>Sign in or sign up to continue.</Dialog.Description>
 		</Dialog.Header>
 		<Tabs.Root value="signin">
 			<Tabs.List class="text-center">
@@ -70,7 +71,7 @@
 			<Tabs.Content value="signin" class="mt-5 space-y-5">
 				<Input bind:value={email} type="email" placeholder="Email" />
 				<Input bind:value={password} type="password" placeholder="Password" />
-				<Button on:click={handleSignin} disabled={isLoading}>
+				<Button class="w-full" on:click={handleSignin} disabled={isLoading}>
 					{#if isLoading}
 						<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
 					{/if}
@@ -81,7 +82,7 @@
 				<Input bind:value={username} type="text" placeholder="Username" />
 				<Input bind:value={email} type="email" placeholder="Email" />
 				<Input bind:value={password} type="password" placeholder="Password" />
-				<Button on:click={handleSignup} disabled={isLoading}>
+				<Button class="w-full" on:click={handleSignup} disabled={isLoading}>
 					{#if isLoading}
 						<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
 					{/if}

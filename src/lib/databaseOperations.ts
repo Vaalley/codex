@@ -17,7 +17,7 @@ export async function signup(username: string, email: string, password: string) 
 	}
 
 	if (typeof password !== 'string' || password.length < 8) {
-		throw new Error('Password must be at least 8 characters');
+		throw new Error('Password must be at least 8 characters long');
 	}
 
 	const hashedPassword = await hashPassword(password);
