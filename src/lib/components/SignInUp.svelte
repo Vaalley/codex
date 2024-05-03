@@ -6,13 +6,14 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { Input } from '$lib/components/ui/input';
 	import { buttonVariants, Button } from '$lib/components/ui/button/index';
-	import { signup, signin } from '$lib/databaseOperations';
+	// import { signup, signin } from '$lib/databaseOperations';
+	import axios from 'axios';
 
 	let username = $state('');
 	let email = $state('');
 	let password = $state('');
 	let isLoading = $state(false);
-	let user = $state(null);
+	// let user = $state(null);
 
 	// $inspect(user);
 
@@ -22,25 +23,36 @@
 		password = '';
 	};
 
-	const handleSignup = async () => {
-		isLoading = true;
-		try {
-			await signup(username, email, password);
-			toast.success('Signup successful!');
-		} catch (error) {
-			console.error('Signup failed:', error);
-			toast.error(`Signup failed: ${error.message}`);
-		} finally {
-			isLoading = false;
-			resetForm();
-		}
-	};
+	// const handleSignin = async () => {
+	// 	isLoading = true;
+	// 	try {
+	// 		const { user, token } = await signin(email, password);
+	// 		console.log(user, token);
+	// 		toast.success('Sign in successful!');
+	// 	} catch (error) {
+	// 		console.error('Signin failed:', error);
+	// 		toast.error(`Sign in failed: ${error.message}`);
+	// 	} finally {
+	// 		isLoading = false;
+	// 		resetForm();
+	// 	}
+	// };
 
 	const handleSignin = async () => {
 		isLoading = true;
 		try {
-			user = await signin(email, password);
-			console.log(user);
+			const response = await axios.post(
+				'http://localhost:3000/signin',
+				{ email, password },
+				{
+					params: {
+						email,
+						password
+					}
+				}
+			);
+			const { token } = response.data;
+			console.log(user, token);
 			toast.success('Sign in successful!');
 		} catch (error) {
 			console.error('Signin failed:', error);
@@ -50,14 +62,26 @@
 			resetForm();
 		}
 	};
+
+	const handleSignup = async () => {
+		// 	isLoading = true;
+		// 	try {
+		// 		await signup(username, email, password);
+		// 		toast.success('Signup successful!');
+		// 	} catch (error) {
+		// 		console.error('Signup failed:', error);
+		// 		toast.error(`Signup failed: ${error.message}`);
+		// 	} finally {
+		// 		isLoading = false;
+		// 		resetForm();
+		// 	}
+	};
 </script>
 
 <Dialog.Root>
-	{#if !user}
-		<Dialog.Trigger class={[buttonVariants({ variant: 'secondary' }), 'flex items-center gap-2']}
-			><LogIn class="h-4 w-4" /> Sign In / Sign Up</Dialog.Trigger
-		>
-	{/if}
+	<Dialog.Trigger class={[buttonVariants({ variant: 'secondary' }), 'flex items-center gap-2']}
+		><LogIn class="h-4 w-4" /> Sign In / Sign Up</Dialog.Trigger
+	>
 	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>Welcome {Tabs.Root.value === 'signin' ? 'back' : ''} to Codex!</Dialog.Title>
