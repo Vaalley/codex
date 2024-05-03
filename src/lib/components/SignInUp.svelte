@@ -42,18 +42,14 @@
 		isLoading = true;
 		try {
 			const response = await axios.post(
-				'http://localhost:3000/signin',
-				{ email, password },
-				{
-					params: {
-						email,
-						password
-					}
-				}
+				'https://your-vercel-project-name.vercel.app/api/signin', // Replace with your Vercel URL
+				{ email, password }
 			);
-			const { token } = response.data;
+
+			const { user, token } = response.data;
 			console.log(user, token);
 			toast.success('Sign in successful!');
+			// Perform any additional actions, like storing the token or redirecting the user
 		} catch (error) {
 			console.error('Signin failed:', error);
 			toast.error(`Sign in failed: ${error.message}`);
