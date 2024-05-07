@@ -1,9 +1,3 @@
-<script>
-	// let { data } = $props();
-
-	// $inspect(data);
-</script>
-
 <svelte:head>
 	<title>Codex</title>
 </svelte:head>
